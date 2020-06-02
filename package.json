@@ -1,0 +1,21 @@
+{
+  "name": "uni-property-decorator",
+  "version": "1.0.1",
+  "description": "uni-app ts装饰器扩展,解决 @Prop 初始值注入需要另外在 data(){} 定义属性字段问题.",
+  "main": "index.js",
+  "author": "Halo",
+  "license": "MIT",
+  "typings": "./index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "uni-app",
+    "vue typescript",
+    "decorator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a951055/uni-property-decorator.git"
+  }
+}
