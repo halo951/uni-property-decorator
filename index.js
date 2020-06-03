@@ -8,13 +8,14 @@
  * @param value [可空] 写入data的初始值,由于
  */
 export const Data = function (value) {
-  return function (target, key) {
-    if (!target["__init__"]) target["__init__"] = {};
-    target["__init__"][key] = value || target[key] || null;
-    target.data = function () {
-      return target["__init__"];
+    return function (target, key) {
+        if (!target["__init__"])
+            target["__init__"] = {};
+        target["__init__"][key] = value || target[key] || null;
+        target.data = function () {
+            return target["__init__"];
+        };
     };
-  };
 };
 /**
  * uni data 属性装饰器 - 默认属性扩展
@@ -24,12 +25,16 @@ export const Data = function (value) {
  * @param constructor vue class 这里没有引入 `vue-property-decorator` 进行限定,所以使用时要稍微注意
  */
 export const DataInit = function (constructor) {
-  let target = new constructor();
-  let data = target.data();
-  for (let k in data) {
-    if (data[k] === null && target[k]) data[k] = target[k];
-  }
-  constructor.prototype.data = function () {
-    return data;
-  };
+    let target = new constructor();
+    /** 检查 */
+    if (typeof target.data !== "function")
+        return;
+    let data = target.data?.() ?? {};
+    for (let k in data) {
+        if (data[k] === null && target[k])
+            data[k] = target[k];
+    }
+    constructor.prototype.data = function () {
+        return data;
+    };
 };

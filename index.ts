@@ -25,7 +25,9 @@ export const Data = function (value?: any) {
  */
 export const DataInit = function <T extends new (...args: any[]) => any>(constructor: T) {
   let target = new constructor();
-  let data = target.data();
+  /** 检查 */
+  if (typeof target.data !== "function") return;
+  let data = target.data?.() ?? {};
   for (let k in data) {
     if (data[k] === null && target[k]) data[k] = target[k];
   }
