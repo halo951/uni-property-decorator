@@ -1,6 +1,6 @@
 {
   "name": "uni-property-decorator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "uni-app ts装饰器扩展,解决 @Prop 初始值注入需要另外在 data(){} 定义属性字段问题.",
   "main": "index.js",
   "author": "Halo",
