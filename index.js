@@ -29,7 +29,7 @@ export const DataInit = function (constructor) {
     /** 检查 */
     if (typeof target.data !== "function")
         return;
-    let data = target.data?.() ?? {};
+    let data = target.data() || {};
     for (let k in data) {
         if (data[k] === null && target[k])
             data[k] = target[k];
