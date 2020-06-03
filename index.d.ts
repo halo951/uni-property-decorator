@@ -1,3 +1,4 @@
+export declare const $internalHooks: string[];
 /**
  * uni data 属性装饰器
  * @usage `@Data() data1:any;` or `@Data(111) data:number;` 按照 @Prop 的格式定义对象,然后 在 @Data 参数中写入初始值

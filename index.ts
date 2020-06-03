@@ -60,31 +60,3 @@ export const DataInit = function <T extends new (...args: any[]) => any>(constru
     return data;
   };
 };
-
-export const Property = function (value?: any) {
-  return function (target: any, key: string) {
-    Data(value);
-
-    if (!target["__init__"]) target["__init__"] = {};
-    if ($internalHooks.indexOf(key) !== -1) return; // skip by lock key.
-    target["__init__"][key] = new Proxy(
-      {
-        key,
-        value
-      },
-      {
-        get(key) {}
-      }
-    );
-    if (target.data && typeof target.data === "function") {
-      let origin = target.data();
-      target.data = function () {
-        return { ...target["__init__"], ...origin };
-      };
-    } else {
-      target.data = function () {
-        return target["__init__"];
-      };
-    }
-  };
-};

@@ -4,6 +4,8 @@
 
 - 主要用来解决使用 typescript 语法开发 uni-app 时,装饰器兼容问题.
 
+- 暂时只能支持到 \$data , props 属性得按着 vue 的规范来, 即 小程序的 properties 需要用 @Prop() 和 @Model() 替代.
+
 ### 扩展
 
 1. 增加 `@Data` 装饰器 替换 `@Prop` 装饰器. 解决编译小程序情况下初始值写入问题
