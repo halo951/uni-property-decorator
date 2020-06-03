@@ -1,3 +1,19 @@
+export const $internalHooks = [
+  "data",
+  "beforeCreate",
+  "created",
+  "beforeMount",
+  "mounted",
+  "beforeDestroy",
+  "destroyed",
+  "beforeUpdate",
+  "updated",
+  "activated",
+  "deactivated",
+  "render",
+  "errorCaptured",
+  "serverPrefetch" // 2.6
+];
 /**
  * uni data 属性装饰器
  * @usage `@Data() data1:any;` or `@Data(111) data:number;` 按照 @Prop 的格式定义对象,然后 在 @Data 参数中写入初始值
@@ -10,12 +26,21 @@
 export const Data = function (value?: any) {
   return function (target: any, key: string) {
     if (!target["__init__"]) target["__init__"] = {};
+    if ($internalHooks.indexOf(key) !== -1) return; // skip by lock key.
     target["__init__"][key] = value || target[key] || null;
-    target.data = function () {
-      return target["__init__"];
-    };
+    if (target.data && typeof target.data === "function") {
+      let origin = target.data();
+      target.data = function () {
+        return { ...target["__init__"], ...origin };
+      };
+    } else {
+      target.data = function () {
+        return target["__init__"];
+      };
+    }
   };
 };
+
 /**
  * uni data 属性装饰器 - 默认属性扩展
  * @usage 作为 vue class 类装饰器使用,注意:要写在 @Component 装饰器后.
@@ -33,5 +58,33 @@ export const DataInit = function <T extends new (...args: any[]) => any>(constru
   }
   constructor.prototype.data = function () {
     return data;
+  };
+};
+
+export const Property = function (value?: any) {
+  return function (target: any, key: string) {
+    Data(value);
+
+    if (!target["__init__"]) target["__init__"] = {};
+    if ($internalHooks.indexOf(key) !== -1) return; // skip by lock key.
+    target["__init__"][key] = new Proxy(
+      {
+        key,
+        value
+      },
+      {
+        get(key) {}
+      }
+    );
+    if (target.data && typeof target.data === "function") {
+      let origin = target.data();
+      target.data = function () {
+        return { ...target["__init__"], ...origin };
+      };
+    } else {
+      target.data = function () {
+        return target["__init__"];
+      };
+    }
   };
 };
