@@ -29,7 +29,11 @@ export const Data = function (value) {
             target["__init__"] = {};
         if ($internalHooks.indexOf(key) !== -1)
             return; // skip by lock key.
-        target["__init__"][key] = value || target[key] || null;
+        // fix: 解决下传入0不实例的话对象问题
+        if (value === 0)
+            target["__init__"][key] = value;
+        else
+            target["__init__"][key] = value || target[key] || null;
         if (target.data && typeof target.data === "function") {
             let origin = target.data();
             target.data = function () {
@@ -57,7 +61,7 @@ export const DataInit = function (constructor) {
         return;
     let data = target.data() || {};
     for (let k in data) {
-        if (data[k] === null && target[k])
+        if (data[k] === null && target[k] != undefined)
             data[k] = target[k];
     }
     constructor.prototype.data = function () {
